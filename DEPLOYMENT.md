@@ -4,9 +4,9 @@
 
 - 이 기존 프로젝트가 허브 전체를 소유하며 별도 프로젝트는 만들지 않았다. 저장소는 **https://github.com/jhs512/util.oa.gg (비공개, main)**이며 생성·push를 확인했다.
 - 기존 Worker `ddak-image-compressor`를 유지해 이미지 압축, 글자 수·UTF-8 바이트 계산, 파일 용량 단위 변환을 배포했다. **https://ddak-image-compressor.jangka512.workers.dev**에서 사용할 수 있다.
-- 현재 배포 버전은 `eaa9143a-f9b3-49d3-a20c-c31f92bc4244`다. Workers 무료 플랜을 유지하고 유료 인증서·add-on·결제를 선택하지 않았다.
+- 현재 배포 버전은 `b6250b9e-6863-4085-b7a2-c7fe196bb09c`다. Workers 무료 플랜을 유지하고 유료 인증서·add-on·결제를 선택하지 않았다.
 - 같은 Worker에 `util.oa.gg`, `image-compressor.util.oa.gg`, 기존 `compress.oa.gg` Custom Domain을 연결했다. 새 두 호스트는 충돌이 없었고 Cloudflare 권한 DNS에서 실제 A/AAAA 레코드 생성을 확인했다. 기존 root/www/다른 앱/MX는 변경하지 않았다.
-- DNS 담당이 Cloudflare zone 활성화를 확인했다. Google DNS(8.8.8.8)는 새 호스트 주소를 반환하지만 일부 캐시는 이전 이름 서버를 사용한다. **마지막 HTTPS 검사는 인증서 준비 중 TLS handshake 실패였다. 두 전용 호스트 접속 완료로 표시하지 않는다.**
+- DNS 담당이 Cloudflare zone 활성화를 확인했다. Google DNS(8.8.8.8)는 새 호스트 주소를 반환하지만 일부 캐시는 이전 이름 서버를 사용한다. **image-compressor.util.oa.gg는 정상 TLS와 실제 PC/모바일 압축·다운로드를 확인했다. util.oa.gg는 마지막 검사에서 인증서 handshake 실패로 대기 중이다. 주 주소의 접속 완료로 표시하지 않는다.**
 - [Cloudflare 공식 문서](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/#certificates)에 따르면 Custom Domain은 여러 단계의 서브도메인 인증서를 자동 생성하고 별도 ACM 구독이 필요 없다. 실제 공개 TLS 성공은 별도 검증해야 한다.
 - 대표 이미지 페이지 canonical은 `https://util.oa.gg/`이고 이미지 전용/기존 호스트는 동일 HTML을 제공한다. sitemap과 공개 내부 링크를 대표 주소에 맞췄다. 독립 도구는 독립 콘텐츠와 경로를 제공한다. [SEO.md](SEO.md)를 참조한다.
 - 실제 AdSense 게시자 메타 태그와 `/ads.txt`를 준비했다. oa.gg의 승인 상태는 검토 필요이므로 광고를 실행하지 않는다. 루트 ads.txt와 소유권 확인·Google 검토·동의 준비는 [ADVERTISING.md](ADVERTISING.md)에 기록했다.
@@ -16,6 +16,10 @@
 로컬 PC/모바일 **24 passed (10.5s)**, 공개 기본 URL **24 passed (17.9s)**. 마지막 공개 탐색 링크 수정 후 관련 허브 검증 **6 passed (4.8s)**, 로컬 내부 링크 수정 후 **6 passed (1.1s)**. 기존 실제 사진·다운로드·투명도·실패 테스트를 유지했다. 새 도구는 한국어/이모지/공백/UTF-8와 십진/이진 단위·음수 거부를 확인했다. 공개 canonical·sitemap·개인정보 페이지·광고 스크립트 비활성을 검사했다.
 
 `node scripts/capture.cjs`로 공개 실제 사진 결과의 PC·모바일 스크린샷을 재현할 수 있다. 결과는 `verification-artifacts`에만 저장되고 git 및 공개 assets에서 제외한다. `TEST_BASE_URL`로 검증할 주소를 지정할 수 있다.
+
+`node scripts/domain-smoke.cjs`는 Google 공개 DNS로 두 전용 호스트를 해석하고 인증서를 정상 검증하며 실제 다운로드를 검사한다. 시스템 DNS나 인증서 검증 설정은 바꾸지 않는다. 이미지 전용 주소의 PC·모바일 결과는 각각 **9,956 B**, 서버 업로드·외부 요청 0, 정상 WebP였다. `util.oa.gg` 인증서가 준비되지 않아 전체 스크립트의 종료 코드는 1이다. 이는 주 주소가 아직 미완료라는 결과를 유지하기 위한 동작이다.
+
+Custom Domain을 실제 검사하면서 Cloudflare 분석 스크립트 자동 삽입을 발견했다. [공식 FAQ](https://developers.cloudflare.com/web-analytics/faq/#my-website-is-proxied-through-cloudflare-but-web-analytics-automatic-setup-is-not-working)에 따라 앱 응답에 `Cache-Control: public, no-transform`을 추가했다. CSP를 완화하거나 다른 사이트의 분석 설정을 변경하지 않았다. 재검증에서는 삽입된 외부 스크립트 요청도 없었다.
 
 ### 다음 완료 기준
 
