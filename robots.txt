@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://util.oa.gg/sitemap.xml

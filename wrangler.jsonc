@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ddak-image-compressor",
+  "account_id": "94c70c86e43f500a7ce46e85347e8d5e",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "compress.oa.gg", "custom_domain": true },
+    { "pattern": "util.oa.gg", "custom_domain": true },
+    { "pattern": "image-compressor.util.oa.gg", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "none"
+  }
+}

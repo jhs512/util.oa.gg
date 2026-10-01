@@ -1,0 +1,50 @@
+# Cloudflare 공개 배포
+
+2026-10-01 배포·검증. 승인된 첫 이미지 압축기만 배포했다.
+
+## 확인된 상태
+
+- **공개 기본 URL:** https://ddak-image-compressor.jangka512.workers.dev — 정상 HTTPS, HTTP 200.
+- **호스팅:** Cloudflare Workers Static Assets. Worker 이름 `ddak-image-compressor`, 계정 `94c70c86e43f500a7ce46e85347e8d5e`. Workers 요금제 화면에서 **무료 US$0 / 현재 요금제**를 직접 확인했다. 앱 처리용 서버 스크립트·DB·KV·업로드 API·유료 add-on은 없다.
+- **버전:** `b1532b9c-7ac7-4222-b373-515aebcdaf7a`, 100% 배포. 게시 시각 2026-10-01 10:28 KST.
+- **전용 도메인 구성 완료 / 접속 대기:** DNS 담당 완료 보고에 따르면 `compress.oa.gg`를 이 Worker production의 Custom Domain으로 등록했고 자동 DNS 레코드가 생성됐다. 기존 8개 DNS 레코드는 보존했다. 마지막 확인에서는 oa.gg zone pending과 공개 NS의 DNSZi 응답이 유지되어 전용 도메인 인증서·HTTPS 접속 성공은 아직 확인하지 않았다. 도메인 추가 작업을 반복하지 않는다.
+- 기존 root/www/다른 호스트/MX/프록시 설정은 이 배포 작업에서 변경하지 않았다. nameserver 이전은 별도 DNS 담당 작업이다.
+
+[공식 정적 assets 요금 문서](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/)상 정적 파일 요청은 무료이고 저장 비용도 없다. 이 앱은 정적 assets만 사용하며 유료 플랜·결제·추가 상품을 선택하지 않았다. API/SSR 같은 기능을 추가하면 비용 구조를 다시 확인해야 한다.
+
+## 공개 검증
+
+공개 기본 URL에서 `TEST_BASE_URL`로 기존 PC·모바일 에뮬레이션 검증을 실행했다. **18 passed (19.1s)**, 실패·스킵 0. 실제 사진: JPEG 17,994 B → WebP 9,956 B, 10 KB 목표 달성. 실제 파일 다운로드와 재디코딩, 알파 유지, JPG 흰 배경, PNG 축소, 목표 미달, 형식/손상/애니메이션 거부, 드롭·키보드 확인을 포함한다.
+
+PC 1280×960 및 모바일 390×844의 공개 결과 화면을 직접 확인했다. 실제 스마트폰/Safari/Firefox는 기존과 동일하게 미검증이다. 이미지 처리 중 외부 요청 또는 POST 업로드가 관찰되지 않았고, 공개 HTTP 응답에 `connect-src 'none'` CSP가 적용된다. 호스팅에 대한 일반 페이지 요청은 Cloudflare를 거친다.
+
+공개 assets는 allowlist로 `index.html`, `style.css`, `app.js`, `compressor.js` 네 파일과 응답 정책 `_headers`만 준비한다. `_headers`는 Cloudflare가 처리하고 공개 파일로 제공하지 않는다. 다음 경로는 실제 **404** 확인: README/RESEARCH/VERIFICATION/AGENTS 문서, package.json, wrangler.jsonc, 테스트 사진, 테스트 스크린샷, server.cjs, `_headers`.
+
+## 재배포
+
+```powershell
+npm ci
+npm run deploy
+```
+
+`build-assets.cjs`는 승인한 파일만 `dist`에 복사하며 예상 밖 파일이 있으면 중단한다. 공개 사이트에서 재검증:
+
+```powershell
+$env:TEST_BASE_URL='https://ddak-image-compressor.jangka512.workers.dev'
+npm test
+Remove-Item Env:TEST_BASE_URL
+```
+
+Wrangler OAuth 로그인은 기존 사용자 계정을 사용한다. 자격 증명은 프로젝트에 복사하거나 게시하지 않는다.
+
+## 전용 도메인과 남은 검증
+
+DNS 담당이 `ddak-image-compressor` Worker의 **Custom Domain**으로 `compress.oa.gg` 등록을 마쳤다. [공식 Custom Domain 문서](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)상 동작에는 active zone이 필요하며 이 방식은 Cloudflare가 DNS 레코드와 인증서를 관리한다. workers.dev 주소를 향하는 수동 CNAME을 추가하지 않는다.
+
+대시보드의 연결이 후속 배포에서 유지되도록 `wrangler.jsonc`에 아래 routes를 기록했다. 이 설정 기록 후 추가 배포나 DNS 변경은 하지 않았다. pending 동안에는 불필요한 재배포를 반복하지 않는다.
+
+```json
+"routes": [{ "pattern": "compress.oa.gg", "custom_domain": true }]
+```
+
+남은 작업은 zone 활성화/전파 후 공개 DNS·정상 인증서·HTTP 200과 `TEST_BASE_URL=https://compress.oa.gg`의 압축/다운로드를 확인하고 이 문서와 전달 보고서를 갱신하는 것이다. 구성은 이미 완료되었으므로 같은 Custom Domain을 다시 추가할 필요가 없다. 필요한 범위는 이 새 호스트의 관리뿐이며 기존 DNS를 변경할 필요는 없다. OAuth 권한 오류가 나오면 기존 로그인 브라우저의 공식 UI로 작업하며 쿠키/토큰을 추출하지 않는다.
