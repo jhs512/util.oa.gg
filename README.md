@@ -43,7 +43,7 @@ Playwright는 테스트 전용 개발 의존성입니다. 실제 내려받은 �
 
 [Cloudflare 공개 허브](https://ddak-image-compressor.jangka512.workers.dev)을 사용할 수 있습니다. 무료 정적 assets로 배포했고 공개 주소에서 압축기와 허브의 **24개 검증이 통과**했습니다. `util.oa.gg`, `image-compressor.util.oa.gg`와 기존 `compress.oa.gg`의 Custom Domain 구성을 모두 보존합니다. 이미지 전용 주소는 Google 공개 DNS를 통해 정상 HTTPS와 실제 PC·모바일 다운로드를 확인했습니다. 주 주소 util.oa.gg는 인증서가 준비 중이고 일부 DNS 캐시도 남아 있어 아직 접속 완료로 표시하지 않습니다.
 
-[GitHub 저장소](https://github.com/jhs512/util.oa.gg)는 비공개이며 main에 업로드했습니다. 공통 탐색의 공개 링크는 비공개 저장소 대신 운영자 프로필을 사용합니다. `npm run deploy`로 같은 Worker를 재배포합니다. 공개 빌드에는 소스 설정·문서·테스트를 넣지 않습니다.
+[GitHub 저장소](https://github.com/jhs512/util.oa.gg)는 사용자 요청에 따라 공개로 전환했으며 main에 업로드했습니다. 사이트에서 소스 코드와 오류 제보 페이지로 이동할 수 있습니다. `npm run deploy`로 같은 Worker를 재배포합니다. 공개 빌드에는 소스 설정·문서·테스트를 넣지 않습니다.
 
 배포 상태는 [DEPLOYMENT.md](DEPLOYMENT.md), 기준은 [AGENTS.md](AGENTS.md), 중복 URL 정책은 [SEO.md](SEO.md), 실제 광고 계정 확인과 남은 승인 단계는 [ADVERTISING.md](ADVERTISING.md)에 기록했습니다. AdSense의 oa.gg는 검토 필요이므로 아직 광고가 게재되지 않습니다.
 

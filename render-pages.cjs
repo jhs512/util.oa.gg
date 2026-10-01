@@ -20,6 +20,5 @@ const pages={
 };
 for(const name of Object.keys(pages)){
   pages[name]=pages[name].replace(/href="\/(?!\/)([^\"]*)"/g,(match,pathname)=>pathname==='style.css'?match:`href="${origin}/${pathname}"`);
-  pages[name]=pages[name].replaceAll('https://github.com/jhs512/util.oa.gg/issues','https://github.com/jhs512').replaceAll('https://github.com/jhs512/util.oa.gg','https://github.com/jhs512').replaceAll('문의·오류 제보','운영자 GitHub').replaceAll('소스 코드</a>와','운영자 GitHub</a>와').replaceAll('오류 제보</a>를 통해 개선합니다.','공개 프로필</a>에서 프로젝트 운영자를 확인할 수 있습니다.').replaceAll('GitHub 문의</a>에 개인정보나 원본 이미지를 첨부하지 않고 현상을 설명해주세요.','운영자 GitHub</a>를 확인할 수 있습니다. 공개 채널에 개인정보나 원본 이미지를 첨부하지 마세요.');
 }
 module.exports={pages};
