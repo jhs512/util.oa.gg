@@ -1,6 +1,6 @@
-# 딱 맞게 — 목표 용량 이미지 압축기
+# util.oa.gg — 한국어 유틸리티 허브
 
-한국어 단일 화면에서 이미지 한 장 → 최대 KB/MB → 미리보기 → 다운로드를 처리하는 로컬 실행 MVP입니다. 이미지와 파일명은 서버로 전송하지 않습니다. 계정·광고·결제·분석 SDK·외부 폰트가 없습니다.
+기존 ‘딱 맞게’ 압축기를 첫 화면에 둔 한국어 유틸리티 허브입니다. 목표 용량 이미지 압축, 글자 수·UTF-8 바이트 계산, 파일 용량 단위 변환을 제공합니다. 이미지·파일명·텍스트는 서버로 전송하거나 브라우저 저장소에 저장하지 않습니다. 회원 가입·결제·분석 SDK·외부 폰트가 없습니다. 광고는 실제 게시자의 확인 메타 태그와 ads.txt만 준비했으며 아직 실행하지 않습니다.
 
 ## 실행
 
@@ -11,7 +11,7 @@ cd C:\works\low-involvement-app
 npm start
 ```
 
-[http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다. 종료는 터미널에서 Ctrl+C입니다. 실행에는 npm install이나 빌드가 필요하지 않습니다. Node 서버는 이 폴더의 HTML/CSS/JS 네 파일만 제공하는 정적 파일 서버이며 루프백 주소에만 바인딩합니다. 파일 처리 API나 업로드 엔드포인트는 없습니다. HTML을 더블 클릭하면 ES 모듈 제한 때문에 정상 작동하지 않을 수 있습니다.
+[http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다. 종료는 터미널에서 Ctrl+C입니다. 실행에는 npm install이나 빌드가 필요하지 않습니다. Node 서버는 승인한 페이지·정적 자원만 제공하고 루프백 주소에만 바인딩합니다. 파일 처리 API나 업로드 엔드포인트는 없습니다. `index.html`은 압축기 본문 템플릿이며 `render-pages.cjs`가 공통 탐색·SEO 메타데이터·실제 도구 페이지를 생성합니다. HTML을 더블 클릭하면 정상 작동하지 않을 수 있습니다.
 
 포트 충돌 시 `$env:PORT=4174; npm start`로 다른 포트를 사용하세요. 모바일 레이아웃은 구현되어 있지만 이 루프백 서버에 실제 휴대폰으로 직접 접속할 수는 없습니다. 실제 기기 검증에는 별도의 로컬 네트워크 또는 HTTPS 정적 호스팅 환경이 필요합니다.
 
@@ -41,4 +41,8 @@ Playwright는 테스트 전용 개발 의존성입니다. 실제 내려받은 �
 
 ## 공개 배포
 
-[Cloudflare 공개 앱](https://ddak-image-compressor.jangka512.workers.dev)을 사용할 수 있습니다. 정적 assets만 무료 방식으로 배포했고 공개 주소에서도 기존 18개 검증이 통과했습니다. DNS 담당이 `compress.oa.gg` Custom Domain 구성과 자동 DNS 등록을 완료했지만 oa.gg의 Cloudflare 활성화·이름 서버 전파가 대기 중이라 전용 도메인 HTTPS 접속 검증은 아직 완료하지 않았습니다. 재배포와 남은 검증 단계는 [DEPLOYMENT.md](DEPLOYMENT.md), 기본 배포 정책은 [AGENTS.md](AGENTS.md)에 기록했습니다.
+[Cloudflare 공개 허브](https://ddak-image-compressor.jangka512.workers.dev)을 사용할 수 있습니다. 무료 정적 assets로 배포했고 공개 주소에서 압축기와 허브의 **24개 검증이 통과**했습니다. `util.oa.gg`, `image-compressor.util.oa.gg`와 기존 `compress.oa.gg`의 Custom Domain 구성을 모두 보존합니다. oa.gg의 이름 서버 전파 및 인증서 대기로 전용 도메인의 HTTPS 접속은 아직 미검증입니다.
+
+[GitHub 저장소](https://github.com/jhs512/util.oa.gg)는 비공개이며 main에 업로드했습니다. 공통 탐색의 공개 링크는 비공개 저장소 대신 운영자 프로필을 사용합니다. `npm run deploy`로 같은 Worker를 재배포합니다. 공개 빌드에는 소스 설정·문서·테스트를 넣지 않습니다.
+
+배포 상태는 [DEPLOYMENT.md](DEPLOYMENT.md), 기준은 [AGENTS.md](AGENTS.md), 중복 URL 정책은 [SEO.md](SEO.md), 실제 광고 계정 확인과 남은 승인 단계는 [ADVERTISING.md](ADVERTISING.md)에 기록했습니다. AdSense의 oa.gg는 검토 필요이므로 아직 광고가 게재되지 않습니다.

@@ -2,7 +2,7 @@ const {test,expect}=require('@playwright/test');
 test('hub entry, canonical, real discovery, privacy and no active ad script',async({page,request})=>{
   await page.goto('/');await expect(page.locator('.brand')).toContainText('util.oa.gg');await expect(page.locator('#file')).toBeAttached();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href','https://util.oa.gg/');
-  await expect(page.locator('nav a[href="https://util.oa.gg/text-counter/"]')).toBeVisible();expect(await page.locator('script[src*="googlesyndication"]').count()).toBe(0);
+  await expect(page.locator('nav a[href$="/text-counter/"]')).toBeVisible();expect(await page.locator('script[src*="googlesyndication"]').count()).toBe(0);
   await expect(page.locator('meta[name="google-adsense-account"]')).toHaveAttribute('content','ca-pub-8194376114167709');
   const sitemap=await request.get('/sitemap.xml');expect(sitemap.status()).toBe(200);expect(await sitemap.text()).toContain('https://util.oa.gg/text-counter/');
   for(const route of ['/about/','/privacy/']){const response=await request.get(route);expect(response.status()).toBe(200);expect(await response.text()).toContain('<link rel="canonical"');}

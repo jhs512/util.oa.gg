@@ -1,5 +1,15 @@
 # MVP 검증 결과
 
+## util.oa.gg 허브 확장 검증 (2026-10-01)
+
+- 로컬 PC/모바일 24개 검증 통과 (10.5s), 공개 Worker 기본 URL도 24개 통과 (17.9s).
+- 기존 압축기 18개를 그대로 유지하고 한국어·이모지의 글자/UTF-8 계산, 초기화, 십진/이진 단위 변환과 음수 입력 거부, canonical/sitemap/실제 도구 탐색/개인정보 페이지/광고 비활성의 6개 검증을 추가했다.
+- 비공개 저장소의 사용자 접근 불가능 링크를 공개 운영자 프로필로 바꾼 후 공개 허브 관련 6개를 재검증했다 (4.8s). 로컬 도구 간 링크도 로컬 서버에서 이동하도록 조정하고 6개를 재검증했다 (1.1s).
+- Custom Domain 세 개는 Worker 설정에 보존했다. util.oa.gg와 image-compressor.util.oa.gg의 Cloudflare DNS 생성은 확인했으나 공개 HTTPS 인증서 준비가 남아 두 전용 주소 접속 성공은 아직 미확인이다.
+- 최신 화면 증거는 `node scripts/capture.cjs`의 `verification-artifacts/desktop.png`, `mobile.png`이다. 초기 `test-results` 스크린샷은 테스트 재실행으로 삭제될 수 있다.
+
+아래는 초기 압축기 검증 기록이다.
+
 검증일: 2026-10-01 (Asia/Seoul). 최종 `npm test`: **18 passed (10.6s)**, 실패·스킵 0. Windows의 Playwright Chromium에서 PC 1280×960, 모바일 에뮬레이션 390×844 각각 같은 9개 시나리오를 실행했다. 실제 스마트폰에서의 검증은 아니다.
 
 | 시나리오 | 확인한 결과 |

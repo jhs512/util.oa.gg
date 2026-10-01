@@ -15,7 +15,7 @@
 
 1. util.oa.gg의 공개 DNS와 인증서 전파를 완료하고 검색/광고 크롤러가 공개 페이지를 읽을 수 있게 한다.
 2. [Google의 사이트 관리 규칙](https://support.google.com/adsense/answer/12170421)에 따라 보통의 서브도메인은 기존 등록 사이트와 별도로 관리하지 않는다. 이미 등록된 `oa.gg`의 검토가 필요하다.
-3. [Google ads.txt FAQ](https://support.google.com/adsense/answer/9785052)에 따라 하위 도메인 ads.txt는 루트 ads.txt의 참조도 확인해야 한다. **기존 oa.gg 루트 사이트를 덮어쓰지 않고**, 그 사이트 담당자가 기존 ads.txt에 아래를 병합하도록 한다. 기존 판매자 행이 있으면 보존한다.
+3. [Google ads.txt FAQ](https://support.google.com/adsense/answer/9785052)에 따라 루트 ads.txt의 게시자 권한부터 확인한다. 서브도메인의 판매자/게시자가 루트와 다를 때는 `subdomain=` 참조가 필요하다. **기존 oa.gg 루트 사이트를 덮어쓰지 않고**, 그 사이트 담당자가 실제 상태에 맞게 아래를 병합하도록 한다. 기존 판매자 행은 보존하고 같은 행이 있으면 중복 추가하지 않는다. 서브도메인 행은 분리된 ads.txt를 명시적으로 참조하려는 경우의 준비 값이다.
 
 ```text
 google.com, pub-8194376114167709, DIRECT, f08c47fec0942fa0

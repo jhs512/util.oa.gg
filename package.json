@@ -1,7 +1,7 @@
 {
-  "name": "low-involvement-app",
+  "name": "util.oa.gg",
   "version": "1.0.0",
-  "description": "Local target-size image compressor",
+  "description": "Korean local-processing utility hub",
   "scripts": {
     "test": "playwright test",
     "start": "node server.cjs",

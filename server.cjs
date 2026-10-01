@@ -10,7 +10,7 @@ http.createServer((req,res)=>{
   if(name.endsWith('/'))name+='index.html';
   if(!publicFiles.has(name)&&!pages[name]){res.writeHead(404);res.end('Not found');return;}
   const headers={'Content-Type':types[path.extname(name)],'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; connect-src 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'none'"};
-  if(pages[name]){res.writeHead(200,headers);res.end(pages[name]);return;}
+  if(pages[name]){res.writeHead(200,headers);res.end(pages[name].replaceAll('<a href="https://util.oa.gg/','<a href="/'));return;}
   fs.readFile(path.join(__dirname,name),(error,data)=>{
     if(error){res.writeHead(500);res.end('Read error');return;}
     res.writeHead(200,headers);res.end(data);
