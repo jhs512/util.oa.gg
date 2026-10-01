@@ -1,49 +1,26 @@
-# util.oa.gg — 한국어 유틸리티 허브
+# util.oa.gg — free browser-based tools
 
-기존 ‘딱 맞게’ 압축기를 첫 화면에 둔 한국어 유틸리티 허브입니다. 목표 용량 이미지 압축, 글자 수·UTF-8 바이트 계산, 파일 용량 단위 변환을 제공합니다. 이미지·파일명·텍스트는 서버로 전송하거나 브라우저 저장소에 저장하지 않습니다. 회원 가입·결제·분석 SDK·외부 폰트가 없습니다. 광고는 실제 게시자의 확인 메타 태그와 ads.txt만 준비했으며 아직 실행하지 않습니다.
+An English utility hub for international users: target-size image compression, character/word/UTF-8 byte counting, and file size conversion. Images, filenames and text inputs remain in the browser. No signup, payment, external fonts or analytics SDK is required. AdSense verification is prepared; ads are not enabled.
 
-## 실행
+## Run locally
 
-Node.js 20 이상이 있는 PowerShell에서:
+With Node.js 20 or later, run `npm start` and open http://127.0.0.1:4173. The loopback server serves an allowlist of pages and assets with no upload endpoint. `index.html` supplies the compressor template; `render-pages.cjs` generates shared navigation and static English SEO content. Open through the server rather than double-clicking HTML.
 
-```powershell
-cd C:\works\low-involvement-app
-npm start
-```
+## Image processing contract
 
-[http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다. 종료는 터미널에서 Ctrl+C입니다. 실행에는 npm install이나 빌드가 필요하지 않습니다. Node 서버는 승인한 페이지·정적 자원만 제공하고 루프백 주소에만 바인딩합니다. 파일 처리 API나 업로드 엔드포인트는 없습니다. `index.html`은 압축기 본문 템플릿이며 `render-pages.cjs`가 공통 탐색·SEO 메타데이터·실제 도구 페이지를 생성합니다. HTML을 더블 클릭하면 정상 작동하지 않을 수 있습니다.
+- Static JPEG, PNG and WebP only. Byte headers and dimensions are checked before decoding. SVG, GIF, HEIC and animated PNG/WebP are rejected.
+- Limits: 20,000,000 bytes, 24 million pixels, 8,192 pixels per side. Dimensions are checked again after decoding. These limits cannot guarantee protection from every damaged file or memory shortage.
+- Targets: 1 byte through 20 MB; 1 KB = 1,000 bytes and 1 MB = 1,000,000 bytes. Fractional targets are rounded down to whole bytes.
+- JPEG/WebP quality settings range from 0.60 to 0.95. PNG uses dimension reduction. Resizing keeps each dimension at least 25% of its original value and can be disabled.
+- Actual Blob bytes determine success. Unreachable targets are labeled honestly. The search is a practical approximation rather than a guarantee of optimal visual quality.
+- Already-small inputs in the selected format are preserved. Larger conversion results are disclosed. JPG flattens transparency to white; PNG/WebP can retain alpha.
 
-포트 충돌 시 `$env:PORT=4174; npm start`로 다른 포트를 사용하세요. 모바일 레이아웃은 구현되어 있지만 이 루프백 서버에 실제 휴대폰으로 직접 접속할 수는 없습니다. 실제 기기 검증에는 별도의 로컬 네트워크 또는 HTTPS 정적 호스팅 환경이 필요합니다.
+Canvas re-encoding may remove EXIF and other metadata; colors and encoded size can vary by browser. The original file is never overwritten. Check output quality, dimensions and destination requirements before use.
 
-## 사용과 지원 계약
+## Verify and deploy
 
-- **입력:** 정지 JPEG, PNG, WebP. 확장자/MIME만 믿지 않고 바이트 헤더와 크기를 확인한 뒤 디코딩합니다. SVG, GIF, HEIC, 애니메이션 PNG/WebP는 거부합니다.
-- **한도:** 20,000,000 B, 24,000,000 픽셀, 한 변 8,192 px. 디코딩 전 헤더 크기와 디코딩 후 크기를 확인합니다. 이는 모든 손상 파일·메모리 부족을 막는 보장은 아닙니다.
-- **단위:** 1 KB = 1,000 B, 1 MB = 1,000,000 B. 소수 목표는 바이트 이하로 내림합니다. 목표 범위는 1 B~20 MB입니다.
-- **출력:** WebP(기본), JPG(흰 배경), PNG. JPEG/WebP는 품질 설정 0.60~0.95를 탐색합니다. PNG는 품질 인자가 아닌 픽셀 축소로 접근합니다. 원본 크기를 우선하고 필요한 경우 단계적으로 줄여 가로·세로 각각 원본의 25% 이상을 유지합니다. 축소를 끌 수 있습니다.
-- **판정:** 반환 Blob의 실제 바이트 수로 최대 용량 이하 여부를 판정합니다. 하한에서 달성하지 못하면 ‘목표 미달’과 목표 초과 다운로드임을 표시합니다. 탐색은 실용적 근사 방식이며 모든 인코더에서 최적 품질을 보장하지 않습니다.
-- 원본이 선택한 출력 형식이고 이미 목표 이하라면 그대로 내려받습니다. 같은 형식의 실패 결과가 원본보다 크면 원본을 유지합니다. 형식 변환 결과가 커지면 이를 안내합니다.
-- 미리보기 클릭 또는 키보드 Enter/Space로 크게 확인할 수 있습니다. 목표를 달성해도 사진의 식별 가능성이나 제출처의 픽셀·형식·메타데이터 요구 조건을 보장하지 않습니다.
+Run `npm ci`, `npx playwright install chromium`, then `npm test`. The 24 desktop/mobile flow checks cover actual downloaded files, alpha, limits, honest failures and the two other utilities. The real photo fixture is [MDN rhino.jpg](https://mdn.github.io/shared-assets/images/examples/rhino.jpg). Actual phones, Safari/Firefox and low-memory devices remain unverified.
 
-Canvas 재인코딩은 메타데이터를 보존하는 도구가 아닙니다. EXIF 등이 제거될 수 있고 색상·인코딩 크기는 브라우저마다 다를 수 있습니다. 큰 이미지는 처리 시간과 메모리를 사용하며 실행 중 탭을 닫으면 작업이 끝납니다. 원본 파일은 수정하지 않습니다.
+Run `npm run deploy` to deploy the existing Cloudflare Worker. Build-time checks reject Korean text in public HTML/JS and unexpected assets. Documentation, tests, configuration and secrets are not published as assets.
 
-## 검증 재현
-
-```powershell
-npm ci
-npx playwright install chromium
-npm test
-```
-
-Playwright는 테스트 전용 개발 의존성입니다. 실제 내려받은 파일을 재디코딩해 바이트·픽셀·알파를 확인합니다. 테스트 사진은 [MDN 예제 rhino.jpg](https://mdn.github.io/shared-assets/images/examples/rhino.jpg)이며 `tests/fixtures/rhino.jpg`에 보관했습니다. 추가 테스트 이미지는 Canvas에서 결정적인 노이즈와 투명 영역을 만든 실제 PNG/JPEG/WebP 파일입니다. 자세한 결과는 `VERIFICATION.md`, 선택 근거와 다음 실험은 `RESEARCH.md`에 있습니다.
-
-실제 스마트폰, Safari/Firefox, 저사양 기기는 아직 검증하지 않았습니다. 검색 유입·매출 실험도 수행하지 않았습니다.
-
-## 공개 배포
-
-[Cloudflare 공개 허브](https://ddak-image-compressor.jangka512.workers.dev)을 사용할 수 있습니다. 무료 정적 assets로 배포했고 공개 주소에서 압축기와 허브의 **24개 검증이 통과**했습니다. `util.oa.gg`, `image-compressor.util.oa.gg`와 기존 `compress.oa.gg`의 Custom Domain 구성을 모두 보존합니다. 이미지 전용 주소는 Google 공개 DNS를 통해 정상 HTTPS와 실제 PC·모바일 다운로드를 확인했습니다. 주 주소 util.oa.gg는 인증서가 준비 중이고 일부 DNS 캐시도 남아 있어 아직 접속 완료로 표시하지 않습니다.
-
-[GitHub 저장소](https://github.com/jhs512/util.oa.gg)는 사용자 요청에 따라 공개로 전환했으며 main에 업로드했습니다. 사이트에서 소스 코드와 오류 제보 페이지로 이동할 수 있습니다. `npm run deploy`로 같은 Worker를 재배포합니다. 공개 빌드에는 소스 설정·문서·테스트를 넣지 않습니다.
-
-배포 상태는 [DEPLOYMENT.md](DEPLOYMENT.md), 기준은 [AGENTS.md](AGENTS.md), 중복 URL 정책은 [SEO.md](SEO.md), 실제 광고 계정 확인과 남은 승인 단계는 [ADVERTISING.md](ADVERTISING.md)에 기록했습니다. AdSense의 oa.gg는 검토 필요이므로 아직 광고가 게재되지 않습니다.
-
+[Public repository](https://github.com/jhs512/util.oa.gg). See [deployment status](DEPLOYMENT.md), [verification](VERIFICATION.md), [SEO operations](SEO.md), [advertising readiness](ADVERTISING.md) and [research](RESEARCH.md).

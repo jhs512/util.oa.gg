@@ -1,36 +1,13 @@
-# MVP 검증 결과
+# Verification
 
-## util.oa.gg 허브 확장 검증 (2026-10-01)
+## English-only release — October 1, 2026
 
-- 로컬 PC/모바일 24개 검증 통과 (10.5s), 공개 Worker 기본 URL도 24개 통과 (17.9s).
-- 기존 압축기 18개를 그대로 유지하고 한국어·이모지의 글자/UTF-8 계산, 초기화, 십진/이진 단위 변환과 음수 입력 거부, canonical/sitemap/실제 도구 탐색/개인정보 페이지/광고 비활성의 6개 검증을 추가했다.
-- 저장소는 최초 비공개로 생성 후 사용자 답변에 따라 공개로 전환했다. 사이트의 소스 코드·오류 제보 링크도 공개 저장소로 연결했다. 이전 공개 허브 관련 6개 검증은 통과했다 (4.8s). 로컬 도구 간 링크도 로컬 서버에서 이동하도록 조정하고 6개를 재검증했다 (1.1s).
-- Custom Domain 세 개는 Worker 설정에 보존했다. 이후 이미지 전용 주소는 Google 공개 DNS로 해석하여 정상 TLS와 PC·모바일 각각 9,956 B 실제 다운로드, 서버 업로드·외부 요청 0을 확인했다. util.oa.gg는 인증서가 준비 중이라 아직 접속 성공을 확인하지 못했다. 시스템 DNS의 캐시는 남아 있다.
-- 최신 화면 증거는 `node scripts/capture.cjs`의 `verification-artifacts/desktop.png`, `mobile.png`이다. 초기 `test-results` 스크린샷은 테스트 재실행으로 삭제될 수 있다.
+The site templates, generated pages, accessibility labels and compressor/converter runtime messages are English. All pages use `lang="en"`. Tool pages have unique English titles, descriptions, guidance and canonical URLs. Source and issue links use the public GitHub repository.
 
-아래는 초기 압축기 검증 기록이다.
+Local desktop/mobile functional suite: **24 passed (10.8s)** after conversion. It covers real compression downloads, transparent output, JPG white backgrounds, unreachable targets, changed settings, malformed/animated/oversized input rejection, encoder failures, keyboard preview, text counts and file-unit conversion.
 
-검증일: 2026-10-01 (Asia/Seoul). 최종 `npm test`: **18 passed (10.6s)**, 실패·스킵 0. Windows의 Playwright Chromium에서 PC 1280×960, 모바일 에뮬레이션 390×844 각각 같은 9개 시나리오를 실행했다. 실제 스마트폰에서의 검증은 아니다.
+The real JPEG fixture is 17,994 bytes. Its 10 KB WebP result is 9,956 bytes at 240 × 182 pixels. Downloaded data is decoded again to inspect size, pixels and alpha. Further English/SEO checks and deployed results are recorded below after execution.
 
-| 시나리오 | 확인한 결과 |
-|---|---|
-| 투명 PNG → WebP, 50 KB 목표 | 실제 다운로드 바이트 ≤50,000 B, 알파 유지, 크기 축소 하한 준수, 크기 변경 표시 |
-| PNG → JPG | 투명 영역이 흰색·불투명으로 변환되고 UI에 흰 배경 표시 |
-| PNG → PNG, 500 KB 목표 | 재인코딩·축소 후 ≤500,000 B, 투명 픽셀 보존 |
-| 1 B 목표, 축소 끔 | 목표 미달, 원본 픽셀 크기 유지, 목표 초과 다운로드 문구 |
-| SVG를 PNG로 위장 / 손상 PNG | 바이트 형식 거부 / 디코딩 실패 안내, 이후 정상 JPEG 선택·압축 복구 |
-| 인코더 실패·형식 미지원 | `toBlob(null)` 및 PNG 형식 대체를 주입해 실패 안내·다운로드 없음 확인 |
-| 애니메이션·큰 파일 | APNG/animated WebP 헤더, 8,192 px 초과 헤더, 20 MB 초과 파일을 디코딩 전 거부 |
-| 실제 MDN 코뿔소 JPEG 사진, 0.01 MB | 원본 17,994 B → WebP **9,956 B**, 240×182 px, 목표 달성 |
-| 정지 WebP·사용 흐름 | 실제 WebP 파일 드래그 앤 드롭 → 100 KB 목표 → 다운로드, 키보드 Enter로 결과 크게 보기 |
-| 이미 목표 이하 / 잘못된 목표 | 같은 형식 원본 바이트 보존 / 20 MB 초과 목표 오류·이전 다운로드 무효화 |
+## Limits
 
-테이블의 항목 일부는 하나의 테스트에 묶여 있다. 실제 내려받은 파일을 읽고 다시 디코딩하여 바이트·픽셀·알파를 검사했다. 노이즈/투명 테스트 이미지는 Canvas로 만든 실제 PNG/JPEG/WebP이며 손상·애니메이션 거부 테스트는 필요한 헤더를 구성한 파일을 사용했다. 전체 유효 애니메이션 파일의 모든 변형을 검증한 것은 아니다.
-
-브라우저 요청 관찰상 압축 흐름 중 외부 요청이 없었으며 정적 서버는 `connect-src 'none'`을 사용한다. PC/모바일 결과 화면 스크린샷을 직접 확인했고 가로 넘침이 없는 것을 검사했다. 증거 파일: [PC 결과](test-results/desktop-result.png), [모바일 결과](test-results/mobile-result.png). `npm test` 재실행 시 증거 파일은 갱신된다.
-
-초기 검증에서 테스트용 Blob fetch가 CSP에 차단되는 문제를 다운로드 파일 검사로 수정했다. 한 줄 투명 영역의 JPEG 경계 픽셀은 손실 인코딩의 영향을 받아 넓은 투명 영역으로 테스트 픽스를 수정했다. 목표 입력은 앱의 일관된 한국어 오류 메시지를 사용하도록 조정했다. 최종 검증은 이 변경을 모두 포함한다.
-
-미검증: Safari/Firefox, 실제 Android/iOS, 낮은 메모리의 기기, EXIF/ICC의 다양한 변형, 모든 손상 파일. 압축 품질의 시각적 적합성은 사용자 미리보기 확인이 필요하다. 검색 수요·외부 제출 성공·수익은 검증하지 않았다.
-
-공개 배포 후 기본 URL에서도 동일한 18개 검증이 **18 passed (19.1s)**로 통과했다. 이미지 처리 중 외부 요청·POST가 관찰되지 않았고 CSP 적용과 비공개 경로의 404를 확인했다. DNS 담당이 전용 도메인 `compress.oa.gg`의 Custom Domain 구성·자동 DNS 생성을 완료했지만 HTTPS 접속은 전파 대기로 아직 미검증이다. 상세한 배포 상태는 [DEPLOYMENT.md](DEPLOYMENT.md)에 기록했다.
+Mobile validation uses a Chromium viewport, not a physical phone. Safari, Firefox and low-memory devices have not been tested. Search indexing, rankings, international demand and revenue remain unverified. Normal TLS verification is required for every deployment check.

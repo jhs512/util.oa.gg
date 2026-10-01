@@ -15,7 +15,7 @@ if(quantity){
   const update=()=>{
     const value=Number(quantity.value), factor=Number(document.querySelector('#from-unit').value), bytes=value*factor;
     const valid=quantity.value.trim()!==''&&Number.isFinite(bytes)&&bytes>=0&&bytes<=Number.MAX_SAFE_INTEGER;
-    document.querySelector('#conversion-status').textContent=valid?'십진 단위와 이진 단위를 구분해 표시합니다.':'0 이상의 안전하게 계산할 수 있는 값을 입력하세요.';
+    document.querySelector('#conversion-status').textContent=valid?'Decimal and binary units are shown separately.':'Enter a nonnegative value within the safe calculation range.';
     document.querySelectorAll('[data-factor]').forEach(el=>el.textContent=valid?(bytes/Number(el.dataset.factor)).toLocaleString('ko-KR',{maximumFractionDigits:6}):'—');
   };
   quantity.addEventListener('input',update);document.querySelector('#from-unit').addEventListener('change',update);update();

@@ -1,27 +1,23 @@
-# 목표 용량 이미지 압축기: 선택 근거와 검증 계획
+# Target-size image compression: evidence and next experiments
 
-확인일: 2026-10-01. 이 문서는 작은 MVP의 설계 근거이며 시장 수요나 매출을 입증하는 자료가 아니다.
+Research date: October 1, 2026. This document explains design choices, not proven demand or revenue. The product now targets international users in English.
 
-## 관찰과 수요 가설
+## Existing competition and demand hypothesis
 
-검색어 `compress image KB target tool`, `이미지 100KB 압축`을 확인했다. 검색 결과에는 목표 KB를 입력하는 실제 도구가 다수 등장했다. [imgbox](https://www.theimgbox.com/tools/compress-image-kb)는 목표 KB 압축을 제공하고, [PicsFit](https://picsfit.com/compress-image-to-kb/)는 KB/MB 목표, 품질 우선/크기 우선, 실패 경고를 설명한다. [LocalTools](https://uselocaltools.com/en/tools/compress-to-target-kb)는 로컬 처리와 실제 출력 바이트 측정, 목표 미달 시 가장 가까운 결과 표시를 설명한다. 이는 각 서비스의 공개 기능 설명을 확인한 것이며 실제 성능을 비교 검증한 것은 아니다.
+Public search results for target-KB compression contain existing tools. [imgbox](https://www.theimgbox.com/tools/compress-image-kb) offers target-KB compression. [PicsFit](https://picsfit.com/compress-image-to-kb/) describes KB/MB targets and quality/size priorities. [LocalTools](https://uselocaltools.com/en/tools/compress-to-target-kb) describes local processing, actual output bytes and nearest results when a target is unreachable. These are observed public feature descriptions, not comparative performance tests.
 
-가설: 업로드 상한에 맞추기 위해 품질을 바꾸고 파일 크기를 다시 확인하는 반복을 줄이고 싶은 사용자가 있을 수 있다. 위 검색 사례는 해결하려는 문제가 이미 도구의 주제로 쓰인다는 증거지만 검색량, 한국 사용자 규모, 전환율, 지불 의사 또는 수익의 증거는 아니다. 영상의 광고 계산기 기반 연 수익 추정도 이 프로젝트의 매출 근거로 사용하지 않는다.
+The hypothesis is that users facing upload limits want fewer cycles of adjusting quality and checking file size. Competitor pages establish that this problem is addressed by tools; they do not establish search volume, conversion, willingness to pay or revenue. Target-size compression is not claimed as unique.
 
-범용 압축기와 비교한 초점은 **압축률 대신 원하는 최대 용량 이하를 입력하는 흐름**이다. 경쟁 도구도 같은 기능을 제공하므로 독창적인 기능으로 주장하지 않는다. 이 MVP는 한국어 단일 화면, 파일 업로드 없는 처리, 원본/결과의 실제 용량·픽셀 크기·품질 설정·목표 달성 여부, 내려받기 전 미리보기의 일관성을 검증한다.
+## Browser API basis
 
-## 브라우저 API 근거와 한계
+[createImageBitmap](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap) decodes image blobs; support varies by options and browser. The input contract is narrower than everything the API might decode.
 
-- [`createImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/Window/createImageBitmap)은 Blob을 비트맵으로 읽는 Promise API이며 기본 방향 처리는 EXIF 방향 정보를 따른다. 옵션 일부의 지원 수준은 다를 수 있다. 입력 허용은 API가 읽을 수 있는 모든 유형과 동일하게 잡지 않고 JPEG/PNG/WebP 정지 이미지로 제한한다. SVG·GIF·HEIC 등은 지원 계약에서 제외한다.
-- [`canvas.toBlob`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob)은 출력 Blob 생성에 실패하면 `null`을 줄 수 있다. 미지원 형식을 요청하면 PNG로 대체될 수 있으므로 반환 MIME 타입을 확인해야 한다. `quality`는 JPEG/WebP 같은 손실 형식에 적용되며 PNG 품질을 같은 방식으로 낮출 수 없다. [HTML 표준](https://html.spec.whatwg.org/multipage/canvas.html#dom-canvas-toblob-dev)도 출력 직렬화 규칙을 정의한다.
-- 설계상 목표는 실제 `Blob.size`로 판정한다. 인코더 품질 숫자는 시각적 품질 점수가 아니며 브라우저별 파일 크기/색 표현이 같다고 보장하지 않는다. 지나치게 작은 목표는 품질 하한·축소 하한에서 실패할 수 있다. 실패를 성공으로 표시하지 않는다.
-- JPEG 변환은 투명도를 보존하지 못하므로 배경 합성 사실을 알린다. PNG/WebP에서는 투명도 확인이 필요하다. Canvas 재인코딩은 원본 파일/메타데이터 보존 도구가 아니므로 원본을 덮어쓰지 않는다. 큰 파일은 메모리와 처리 시간 때문에 제한이 필요하다.
+[canvas.toBlob](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob) can return null, and unsupported output types can fall back to PNG. The implementation validates both output existence and MIME type. Quality settings apply to lossy formats such as JPEG/WebP, rather than PNG. The [HTML standard](https://html.spec.whatwg.org/multipage/canvas.html#dom-canvas-toblob-dev) defines serialization behavior.
 
-## 다음 작은 실험
+Success is based on actual Blob bytes. Encoder quality values are not visual-quality scores. Results vary by browser; tiny targets can fail within the minimum quality and dimension constraints. JPG needs an explicit background for transparency, and canvas re-encoding may remove metadata.
 
-현재 MVP에는 분석 SDK, 광고, 계정, 결제, 서버 저장을 넣지 않는다.
+## Next experiments
 
-1. 실제 업로드 제한을 만난 한국 사용자 5명에게 본인 이미지로 목표 입력 → 결과 확인 → 내려받기를 관찰한다. 완료 수, 걸린 시간, 목표 실패, 글자/얼굴 식별 문제를 수동 기록한다. 이미지는 수집하지 않는다.
-2. 공개 실험을 별도로 승인받은 뒤 `사진 100KB 이하`, `이미지 200KB 줄이기`처럼 제한 목적이 드러나는 한국어 페이지 한 개로 2~4주 검색 노출·클릭을 확인한다. Search Console은 이후 선택지이며 지금 연결하지 않는다. 노출이 없으면 수요 부재로 단정하기보다 검색 색인/순위를 함께 확인한다.
-3. 완료/다운로드 전환을 측정할 때는 사전에 고지하고 이미지·파일명·개인정보 없이 최소 집계만 설계한다. 다운로드 클릭은 실제 외부 제출 성공과 다르므로 사용자 피드백으로 보완한다. 소수 표본의 전환은 탐색 신호로 해석한다.
-4. 수익 검증은 유효 검색 유입, 반복 사용, 운영 비용을 확인한 뒤 별도 실험으로 진행한다. 트래픽이나 광고 단가 가정만으로 매출을 약속하지 않는다.
+Observe a small set of international users completing a real target-size task. Manually record completion time, target failures and perceived quality without collecting their images. After Search Console ownership is verified, observe English search impressions and clicks over several weeks. Low impressions require checking indexing and ranking before inferring no demand.
+
+Any later aggregate measurement must avoid images, filenames and pasted text and have appropriate disclosure. Download clicks do not prove successful submission elsewhere. Assess qualified traffic, repeated use and operating costs before revenue experiments; assumed traffic or ad rates are not revenue evidence.

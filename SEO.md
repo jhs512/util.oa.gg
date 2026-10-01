@@ -1,17 +1,27 @@
-# util.oa.gg 검색 구조
+# International SEO operations
 
-## 대표 URL
+English is the sole publishing language. Pages use `lang="en"`; titles, descriptions, visible headings, navigation, accessibility text and runtime messages are English. There are no alternate-language pages or unsupported hreflang declarations.
 
-| 기능 | 대표 URL |
-|---|---|
-| 목표 용량 이미지 압축 | https://util.oa.gg/ |
-| 글자 수·UTF-8 바이트 계산 | https://util.oa.gg/text-counter/ |
-| 용량 단위 변환 | https://util.oa.gg/data-size/ |
+## Search intent and canonical URLs
 
-`image-compressor.util.oa.gg/`, 기존 `compress.oa.gg/`와 Worker 기본 주소도 같은 이미지 압축 페이지를 제공한다. 요구된 여러 검색 입구를 리다이렉트로 없애지 않고, 서버가 제공하는 HTML의 canonical을 `https://util.oa.gg/`로 통일한다. 다른 페이지도 같은 경로의 util.oa.gg URL을 canonical로 사용한다.
+| Tool | Primary intent | Canonical URL |
+|---|---|---|
+| Image compressor | Compress image to target KB/MB, 100 KB or 200 KB | https://util.oa.gg/ |
+| Text counter | Character count, word count, UTF-8 byte count | https://util.oa.gg/text-counter/ |
+| File size converter | Bytes/KB/MB/KiB/MiB conversion | https://util.oa.gg/data-size/ |
 
-대표 호스트의 sitemap만 URL 목록에 사용하고 내부 도구 링크도 해당 대표 주소로 연결한다. 각 실제 기능에 별도의 제목·설명·사용 방법·한계를 제공하며, 존재하지 않는 기능이나 단순 키워드 복제 페이지를 만들지 않는다. 기본 HTML에 메타데이터와 본문이 있어 JavaScript 실행 없이 읽을 수 있다.
+Each working tool has a unique English title, description, H1 and practical explanations of its use and limitations. These are included in static HTML before JavaScript execution. Shared navigation and contextual links connect the real tools. Open Graph and Twitter summary metadata describe each page.
 
-[Google canonical 안내](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)에 따른 중복 신호 정리이며 Google이 선택한 canonical이나 순위·검색 노출을 보장하지 않는다. 공개 DNS/HTTPS가 완료된 뒤 Search Console에서 sitemap 제출·URL 검사·대표 URL 선택을 확인해야 한다. Search Console 등록/검증 토큰은 아직 확인하거나 연결하지 않았다.
+The image hostname, legacy compress hostname and Worker default URL provide the same shared content with the main host as canonical. Sitemap entries and production internal links use only canonical URLs. No duplicate pages are created for individual target sizes. The build rejects Korean characters in shipped HTML and JavaScript; tests verify language, metadata, canonical links, internal destinations and horizontal overflow.
 
-다음 운영 실험은 도구별 실제 사용자 완료율·품질 피드백과 검색 노출·클릭을 관찰하는 것이다. 현재 입력을 수집하는 분석 SDK는 없으며 파일·텍스트 수집 없이 집계 방법을 따로 설계한다. 광고 승인과 매출은 검색 수요의 증명이 아니다.
+[Google title guidance](https://developers.google.com/search/docs/appearance/title-link) recommends concise, descriptive titles consistent with the page language. [Google developer guidance](https://developers.google.com/search/docs/fundamentals/get-started-developers) recommends reachable pages, descriptive metadata and sitemaps. [Canonical guidance](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls) informs alias handling; canonical hints do not guarantee Google's selection or ranking.
+
+## Operational priorities
+
+1. Verify public HTTPS on the main host and every required entry hostname. Resolve any certificate issue before declaring deployment complete.
+2. Verify site ownership in Google Search Console and submit https://util.oa.gg/sitemap.xml. No verification token or authorized Search Console connection has been confirmed; submission is not claimed.
+3. Inspect canonical selection, index coverage and mobile rendering. Check all three tool pages rather than only the homepage.
+4. Observe international search impressions, queries, clicks and actual user feedback. Improve explanations around demonstrated needs. Competition exists; traffic and rankings are unproven.
+5. Use relevant English demonstrations and tool-specific landing URLs for overseas marketing. Any external posting, outreach or paid campaign needs a separate explicit request. Do not collect image files, filenames or pasted text for measurement.
+
+Search exposure and revenue are not guaranteed. Indexing, qualified traffic and successful tool use are separate outcomes.

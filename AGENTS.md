@@ -1,18 +1,19 @@
-# util.oa.gg 유틸리티 허브
+# util.oa.gg utility hub
 
-- 이 프로젝트가 허브와 모든 유틸리티의 소유자다. 같은 사이트용 별도 Codex 프로젝트를 만들지 않는다.
-- 검색 입구에서 해당 도구를 첫 화면에 바로 제공하고 공통 사이트 탐색으로 다른 실제 도구를 발견할 수 있게 한다. 가입과 긴 안내를 사용 전에 요구하지 않는다.
-- 사이트 이름은 `util.oa.gg`다. 주 주소 `util.oa.gg`와 이미지 도구 입구 `image-compressor.util.oa.gg`는 같은 압축기 페이지를 제공한다. 공통 코드와 콘텐츠를 유지하고 호스트별 복제 앱을 만들지 않는다.
-- SEO를 핵심 운영 목표로 삼는다. 실제 기능마다 독자적 설명과 내부 링크를 제공하고 대표 URL 하나로 canonical·sitemap·내부 링크를 일치시킨다. 단순 복제 키워드 페이지나 검색 순위 보장은 사용하지 않는다.
-- Google AdSense 수익화를 준비한다. 실제 게시자 ID·사이트 승인·동의 및 개인정보 처리 조건을 확인한 뒤 광고를 켠다. 임의 ID, 클릭 유도, 수익 보장과 도구를 막는 광고를 사용하지 않는다.
+- This project owns the hub and all its utilities. Keep work in this project; do not create a separate Codex project for the same site.
+- English only: write all site copy, metadata, accessibility labels, runtime messages, new documentation and marketing material in English. Set every page to `lang="en"`. Do not introduce Korean text. User-provided inputs may contain any language.
+- SEO is a core operating objective for international audiences. Give each real tool unique, useful English descriptions, concise titles and crawlable internal links. Align canonical URLs, sitemap and internal links with one representative URL per tool. Avoid duplicate keyword pages and ranking guarantees.
+- Show the tool immediately at each search entry point, with shared navigation to other working tools. Keep use free of signup and lengthy introductory steps.
+- The site name is `util.oa.gg`. `util.oa.gg` and `image-compressor.util.oa.gg` serve the same compressor page from shared code and content.
+- Prepare Google AdSense monetization. Enable ads only after verifying the actual publisher ID, site approval, consent and privacy requirements. Avoid placeholder IDs, click incentives, revenue guarantees and ads that obstruct tools.
 
-## 배포 정책
+## Deployment policy
 
-- 사용자가 요청한 앱과 배포 범위 안에서 작업한다. 이 정책 자체는 새 앱 개발이나 추가 배포의 승인이 아니다.
-- 저관여 앱은 Cloudflare의 적합한 무료 정적 호스팅(Workers Static Assets 또는 Pages)을 기본으로 사용한다. 유료 플랜·추가 비용 옵션은 사용자의 명시적 지시가 있을 때만 선택한다.
-- 새 검색 입구는 앱에 맞는 충돌 없는 호스트를 선정하고 기존 레코드·서비스를 확인한 후 연결한다. 기존 `compress.oa.gg`와 Worker 기본 주소는 호환 입구로 보존한다. 여러 단계의 서브도메인은 호스팅 제품의 인증서 발급과 실제 HTTPS를 확인한다.
-- 기존 root, www, 다른 앱의 DNS·사이트 연결과 메일 레코드는 보존한다. DNS 담당 작업이 따로 있으면 연결 대상과 방식부터 조정한다.
-- 완료 기준은 공개 기본 주소와 전용 서브도메인에서 HTTPS로 실제 앱을 열고 핵심 흐름을 확인하는 것이다. DNS 활성화·전파·인증서가 대기 중이면 완료로 표시하지 않고 확인된 상태와 남은 작업을 기록한다.
-- 이미지 압축과 미리보기는 브라우저 로컬에서 처리한다. 서버 업로드 없는 계약과 CSP를 유지하고 테스트·보고서·설정·비밀 파일은 공개 assets에서 제외한다.
+- Work within the app and deployment scope requested by the user. This policy does not authorize unrelated apps or additional deployments.
+- Use suitable free Cloudflare static hosting: Workers Static Assets or Pages. Paid plans and extra-cost options require explicit user instructions.
+- For a new entry hostname, check conflicts and existing services before connecting it. Preserve `compress.oa.gg` and the Worker default URL as compatible entry points. Verify certificate issuance and actual HTTPS for multilevel subdomains.
+- Preserve root, www, other app DNS/site connections and mail records. Coordinate connection targets and methods with a separate DNS task when applicable.
+- Completion requires opening the real app over HTTPS at the public default URL and dedicated domains, then checking the core flow. Record pending DNS, propagation or certificates as incomplete.
+- Image compression and previews stay in the browser. Preserve the no-upload contract and CSP. Exclude tests, reports, configuration and secrets from public assets.
 
-배포·재배포 시 `DEPLOYMENT.md`를 읽어 현재 호스팅과 검증 방법을 확인한다.
+Before deployment or redeployment, read `DEPLOYMENT.md` for current hosting and verification methods.

@@ -1,7 +1,7 @@
 {
   "name": "util.oa.gg",
   "version": "1.0.0",
-  "description": "Korean local-processing utility hub",
+  "description": "English browser-based utility hub",
   "scripts": {
     "test": "playwright test",
     "start": "node server.cjs",
