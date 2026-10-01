@@ -26,3 +26,15 @@ Set `TEST_BASE_URL` to the public default URL and run `npm test`; remove the env
 CSP retains browser-local processing with `connect-src 'none'`. Responses use `Cache-Control: public, no-transform, max-age=0, must-revalidate` to prevent automatic analytics injection without changing other sites' settings; see the [Cloudflare analytics FAQ](https://developers.cloudflare.com/web-analytics/faq/).
 
 Completion requires valid HTTPS, HTTP 200 and working compression/download at the default and both required custom hosts. Pending certificates are incomplete. Canonical URLs are English and consistent with the sitemap; Search Console ownership/submission remains unconfirmed. AdSense is prepared but inactive pending site approval, root authorization and consent readiness; see [ADVERTISING.md](ADVERTISING.md).
+
+## English release verified
+
+Deployment version: `ea20386f-d361-4785-ab31-23dc42866dac`.
+
+- Local Chromium desktop/mobile suite: **26 passed (10.7s)**.
+- Public Worker default URL suite: **26 passed (17.8s)**.
+- Both `util.oa.gg` and `image-compressor.util.oa.gg` passed valid TLS, HTTP 200 and real desktop/mobile compression/downloads using Google public DNS resolution with the original hostname and certificate checks enabled. Their image-page HTML matched exactly.
+- Each custom-host view downloaded a 9,956-byte WebP under the 10 KB target. No uploads, external requests or blocked injected scripts were observed.
+- Screenshots were reviewed for the English mobile layout. Public HTML/JS passed the English-only build gate; unique metadata, canonical URLs, links and page widths passed automated checks.
+
+The earlier main-host certificate issue is resolved in these tests. Local or ISP DNS caches can still differ until refreshed. AdSense approval and Search Console ownership/submission remain outstanding.
