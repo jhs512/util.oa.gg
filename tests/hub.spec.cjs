@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 
 test('English pages have unique crawlable search metadata and usable layouts',async({page,request})=>{
-  const titles=new Set();
+  const titles=new Set(),checkedLinks=new Set();
   for(const route of ['/','/text-counter/','/data-size/','/about/','/privacy/']){
     const response=await request.get(route);expect(response.status()).toBe(200);
     const html=await response.text();expect(html).not.toMatch(/[\uac00-\ud7a3\u1100-\u11ff\u3130-\u318f]/u);
@@ -13,7 +13,8 @@ test('English pages have unique crawlable search metadata and usable layouts',as
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     for(const href of await page.locator('nav a,.discover a').evaluateAll(links=>links.map(link=>link.getAttribute('href')))){
       expect(href.startsWith('https://util.oa.gg/')||href.startsWith('/')).toBe(true);
-      expect((await request.get(new URL(href,'https://util.oa.gg').pathname)).status()).toBe(200);
+      const pathname=new URL(href,'https://util.oa.gg').pathname;
+      if(!checkedLinks.has(pathname)){expect((await request.get(pathname)).status()).toBe(200);checkedLinks.add(pathname);}
     }
   }
 });

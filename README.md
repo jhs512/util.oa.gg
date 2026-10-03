@@ -1,10 +1,12 @@
 # util.oa.gg — free browser-based tools
 
-An English utility hub for international users: target-size image compression, character/word/UTF-8 byte counting, and file size conversion. Images, filenames and text inputs remain in the browser. No signup, payment, external fonts or analytics SDK is required. AdSense verification is prepared; ads are not enabled.
+An English-default utility hub with Korean support with 13 tools: image compression, text counting, file size conversion, monthly calendar, date calculations, percentages, physical unit conversion, random passwords, timer/stopwatch, JSON formatting, URL encoding, Base64 and colors. All tool inputs remain in the browser. No signup, payment, external fonts or analytics SDK is required. AdSense ownership is verified and site review is underway; ads are not enabled.
+
+Open https://util.oa.gg/tools/ for the English directory or https://util.oa.gg/ko/tools/ for Korean. The language switch opens the same tool in the other language. English remains the default, with no automatic language redirects. Ten dedicated tool subdomains redirect to canonical main-host pages. `tool-catalog.cjs` defines the additional tools, `utility-tools.js` implements their local behavior, and `entry-worker.mjs` routes their entry URLs. The current local and production suites pass 42 tests; `node scripts/utility-domain-smoke.cjs` checks all ten dedicated entry domains on desktop and mobile.
 
 ## Run locally
 
-With Node.js 20 or later, run `npm start` and open http://127.0.0.1:4173. The loopback server serves an allowlist of pages and assets with no upload endpoint. `index.html` supplies the compressor template; `render-pages.cjs` generates shared navigation and static English SEO content. Open through the server rather than double-clicking HTML.
+With Node.js 20 or later, run `npm start` and open http://127.0.0.1:4173. The loopback server serves an allowlist of pages and assets with no upload endpoint. `index.html` supplies the compressor template; `render-pages.cjs` generates shared navigation and static English and Korean SEO content. Open through the server rather than double-clicking HTML.
 
 ## Image processing contract
 
@@ -19,7 +21,7 @@ Canvas re-encoding may remove EXIF and other metadata; colors and encoded size c
 
 ## Verify and deploy
 
-Run `npm ci`, `npx playwright install chromium`, then `npm test`. The 24 desktop/mobile flow checks cover actual downloaded files, alpha, limits, honest failures and the two other utilities. The real photo fixture is [MDN rhino.jpg](https://mdn.github.io/shared-assets/images/examples/rhino.jpg). Actual phones, Safari/Firefox and low-memory devices remain unverified.
+Run `npm ci`, `npx playwright install chromium`, then `npm test`. The 36 desktop/mobile checks cover actual downloaded files, alpha, limits, honest failures and the full utility set. The real photo fixture is [MDN rhino.jpg](https://mdn.github.io/shared-assets/images/examples/rhino.jpg). Actual phones, Safari/Firefox and low-memory devices remain unverified.
 
 Run `npm run deploy` to deploy the existing Cloudflare Worker. Build-time checks reject Korean text in public HTML/JS and unexpected assets. Documentation, tests, configuration and secrets are not published as assets.
 

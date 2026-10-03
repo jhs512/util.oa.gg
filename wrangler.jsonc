@@ -1,16 +1,71 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ddak-image-compressor",
+  "main": "entry-worker.mjs",
   "account_id": "94c70c86e43f500a7ce46e85347e8d5e",
   "compatibility_date": "2026-10-01",
   "workers_dev": true,
   "preview_urls": false,
   "routes": [
-    { "pattern": "compress.oa.gg", "custom_domain": true },
-    { "pattern": "util.oa.gg", "custom_domain": true },
-    { "pattern": "image-compressor.util.oa.gg", "custom_domain": true }
+    {
+      "pattern": "compress.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "image-compressor.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "calendar.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "date-calculator.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "percentage-calculator.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "unit-converter.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "password-generator.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "timer.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "json-formatter.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "url-encoder.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "base64.util.oa.gg",
+      "custom_domain": true
+    },
+    {
+      "pattern": "color-picker.util.oa.gg",
+      "custom_domain": true
+    }
   ],
   "assets": {
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/",
+      "/index.html"
+    ],
     "directory": "./dist",
     "not_found_handling": "none"
   }

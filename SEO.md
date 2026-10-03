@@ -1,6 +1,12 @@
 # International SEO operations
 
-English is the sole publishing language. Pages use `lang="en"`; titles, descriptions, visible headings, navigation, accessibility text and runtime messages are English. There are no alternate-language pages or unsupported hreflang declarations.
+## Ten-tool release update — October 1, 2026
+
+The hub now contains 13 real tools and a `/tools/` directory. Calendar, date calculation, percentages, physical unit conversion, random passwords, timer/stopwatch, JSON formatting, URL encoding, UTF-8 Base64 and color conversion each have one unique English page with practical instructions and explicit limitations. Their canonical paths match the sitemap and discovery links. Ten dedicated custom domains permanently redirect their entry URLs to those main-host pages; aliases do not add duplicate sitemap entries.
+
+Search Console ownership of the canonical URL-prefix property was verified in the signed-in account using the HTML tag published by this project. The 16-URL sitemap (13 tools, directory, about and privacy) was submitted on October 1, 2026. The initial status was "Couldn't fetch" with zero discovered pages. Public checks returned HTTP 200, valid XML and an allowing robots.txt, so Google crawler processing still needs a later successful status. No indexing, ranking or traffic outcome is claimed.
+
+English remains the default at existing URLs. The user requested Korean support on October 1, 2026, superseding the earlier English-only publishing rule. All 16 pages now have Korean equivalents under `/ko/` with `lang="ko"`, translated metadata, guides, navigation, accessibility labels and runtime messages. Each language uses a self-canonical URL and reciprocal `en`, `ko` and `x-default` alternate links. English is the x-default target. The sitemap lists 32 URLs and omits entry-host aliases. Language links open the same tool; no automatic language redirect or stored preference is used. See Google’s [localized-version guidance](https://developers.google.com/search/docs/specialty/international/localized-versions).
 
 ## Search intent and canonical URLs
 
@@ -25,3 +31,13 @@ The image hostname, legacy compress hostname and Worker default URL provide the 
 5. Use relevant English demonstrations and tool-specific landing URLs for overseas marketing. Any external posting, outreach or paid campaign needs a separate explicit request. Do not collect image files, filenames or pasted text for measurement.
 
 Search exposure and revenue are not guaranteed. Indexing, qualified traffic and successful tool use are separate outcomes.
+
+Google live URL inspection of https://util.oa.gg/calendar/ passed on October 1, 2026 (KST): "URL is available to Google" and "Page can be indexed". This confirms live Google access to the calendar, while sitemap processing and actual indexing remain separate pending outcomes.
+
+The calendar indexing request was accepted into Google's priority crawl queue. This is a submitted request, not proof that the page is already indexed.
+
+The canonical homepage indexing request was also accepted into Google's priority crawl queue.
+
+Google live URL inspection of https://util.oa.gg/sitemap.xml also succeeded on October 1, 2026 (KST): crawling allowed, page fetch successful, and indexing allowed. This verifies actual Google smartphone inspection access to the XML; sitemap-report processing remains a separate outcome.
+
+After the successful live XML fetch, the same sitemap URL was resubmitted. Submission was accepted, but the report still showed Couldn't fetch with zero discovered pages at the final check. No duplicate sitemap URL was created.
